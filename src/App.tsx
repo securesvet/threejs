@@ -9,7 +9,7 @@ export default function App() {
     <Main>
       <Flex>
         <CanvasBox>
-          <Car/>
+          <Car color={carColor}/>
         </CanvasBox>
         <AsideBox>
           <OptionsAside color={carColor} setColor={setCarColor} />

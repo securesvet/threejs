@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useLoader, useFrame } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { MTLLoader, OBJLoader } from "three-stdlib";
 import * as THREE from "three";
 
@@ -9,6 +9,7 @@ interface ObjModelProps {
   position?: [number, number, number];
   scale?: [number, number, number];
   rotationSpeed?: number;
+  color?: string;
 }
 
 export function ObjModel({
@@ -17,6 +18,7 @@ export function ObjModel({
   position = [0, 0, 0],
   scale = [1, 1, 1],
   rotationSpeed = 0.01,
+  color = "#ff0000",
 }: ObjModelProps) {
   const groupRef = useRef<THREE.Group>(null!);
 
@@ -24,6 +26,27 @@ export function ObjModel({
   const obj = useLoader(OBJLoader, objPath, (loader) => {
     materials.preload();
     loader.setMaterials(materials);
+  });
+
+  // Override all mesh materials with the selected color
+  obj.traverse((child: unknown) => {
+    if (child instanceof THREE.Mesh) {
+      const name = child.name.toLowerCase();
+      const matName = child.material?.name?.toLowerCase?.() ?? "";
+
+      // Only apply color to car body parts
+      if (
+        name.includes("carroceria") ||
+        name.includes("pueratas") || // doors
+        matName === "material" // generic body material
+      ) {
+        child.material = new THREE.MeshStandardMaterial({
+          color,
+          metalness: 0.3,
+          roughness: 0.6,
+        });
+      }
+    }
   });
 
   useFrame(() => {
