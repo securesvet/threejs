@@ -16,8 +16,8 @@ export default function Car({ color }: { color: string }) {
       <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
       <ObjModel
-        objPath="/models/chevrolet/car.obj"
-        mtlPath="/models/chevrolet/car.mtl"
+        objPath={import.meta.env.BASE_URL + "/models/chevrolet/car.obj"}
+        mtlPath={import.meta.env.BASE_URL + "/models/chevrolet/car.mtl"}
         position={[0, 0, 0]}
         scale={[0.5, 0.5, 0.5]}
         rotationSpeed={0.005}
